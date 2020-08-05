@@ -1,0 +1,17 @@
+{
+  "title": "blank template",
+  "externalLibs": {
+    "javascript": "",
+    "style": ""
+  },
+  "mode": {
+    "html": "html",
+    "style": "css",
+    "javascript": "es6"
+  },
+  "source": {
+    "html": "",
+    "style": "",
+    "javascript": ""
+  }
+}

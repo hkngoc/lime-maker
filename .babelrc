@@ -1,0 +1,10 @@
+{
+  "presets": [
+    ["@babel/preset-env", { targets: { browsers: [ "last 2 chrome version"] } }],
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    "@babel/plugin-transform-runtime"
+  ]
+}

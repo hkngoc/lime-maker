@@ -1,0 +1,17 @@
+{
+  "title": "React template",
+  "externalLibs": {
+    "javascript": "https://unpkg.com/react@16/umd/react.development.js\nhttps://unpkg.com/react-dom@16/umd/react-dom.development.js",
+    "style": "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  },
+  "mode": {
+    "html": "html",
+    "style": "css",
+    "javascript": "es6"
+  },
+  "source": {
+    "html": "<div id=\"root\"></div>\n",
+    "style": "",
+    "javascript": "class App extends React.Component {\n  render() {\n    return (\n      <h1>Hello World!</h1>\n    );\n  }\n}\n\nReactDOM.render(<App/>, document.getElementById(\"root\"));\n"
+  }
+}
