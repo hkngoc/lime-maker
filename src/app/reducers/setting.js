@@ -7,7 +7,7 @@ const initialState = {
     codeSplitSizes: [ 33.33, 33.33, 33.33],
   },
   editor: {
-    theme: "vs-dark",
+    theme: "monokai",
     options: {
       fontSize: 15,
       tabSize: 2,

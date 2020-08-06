@@ -33,17 +33,15 @@ export default class ViewPane extends Component {
       // .flatten()
       .value();
 
-    if (_.findIndex(diff, item => {
-      return item.path.includes("mode") ||
-        item.path.includes("externalLibs") ||
-        item.path.includes("source.javascript") ||
-        item.path.includes("source.html") ||
-        item.path.includes("id");
-    }) >= 0) {
+    if (_.findIndex(diff, item =>
+      item.path.includes("mode") ||
+      item.path.includes("externalLibs") ||
+      item.path.includes("source.javascript") ||
+      item.path.includes("source.html") ||
+      item.path.includes("id")
+    ) >= 0) {
       this.update("all");
-    } else if (_.findIndex(diff, item => {
-      return item.path.includes("source.style");
-    }) >= 0) {
+    } else if (_.findIndex(diff, item => item.path.includes("source.style")) >= 0) {
       this.update("style");
     }
   }

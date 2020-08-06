@@ -62,35 +62,33 @@ class ContentWrap extends Component {
     const { dispatch, opened, auth: { uid }, authorized, firestore, running: { diff: {[mode]: diffState } } } = this.props;
 
     if (mode == "html" || mode == "style" || mode == "javascript") {
-      // check diff state
-      if (diffState) {
-        if (authorized) {
-          try {
-            await firestore.set({
-              collection: "users",
-              doc: uid,
-              subcollections: [{
-                collection: "limes",
-                doc: opened
-              }]
-            }, {
-              source: {
-                [mode]: newValue
-              },
-              viewState: {
-                [mode]: viewState
-              }
-            }, {
-              merge: true
-            });
-          } catch(e) {
-            console.error(e);
-          }
-        } else {
-          dispatch(LimesActionCreators.update(opened, `source.${mode}`, newValue));
-          dispatch(LimesActionCreators.update(opened, `viewState.${mode}`, viewState));
+      if (authorized) {
+        try {
+          await firestore.set({
+            collection: "users",
+            doc: uid,
+            subcollections: [{
+              collection: "limes",
+              doc: opened
+            }]
+          }, {
+            source: {
+              [mode]: newValue
+            },
+            viewState: {
+              [mode]: viewState
+            }
+          }, {
+            merge: true
+          });
+        } catch(e) {
+          console.error(e);
         }
       } else {
+        dispatch(LimesActionCreators.update(opened, `source.${mode}`, newValue));
+        dispatch(LimesActionCreators.update(opened, `viewState.${mode}`, viewState));
+      }
+      if (!diffState) {
         this.updateFrame(mode);
       }
     } else {

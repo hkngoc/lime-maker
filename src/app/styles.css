@@ -406,6 +406,17 @@ input.input-setting {
   color: unset;
 }
 
+.setting-body .custom-control-input:checked ~ .custom-control-label::before{
+  border-color: var(--info);
+  background-color: var(--info);
+}
+
+.setting-body .custom-control-input:disabled:checked ~ .custom-control-label::before {
+  border-color: var(--info);
+  background-color: var(--info);
+  opacity: 0.5;
+}
+
 .tab-content {
   min-height: calc(100vh - 205px);
 }

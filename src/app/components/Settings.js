@@ -163,6 +163,24 @@ class Settings extends Component{
                         </Form.Row>
                       </Form.Group>
                     </div>
+                    <hr/>
+                    <div className="instant-run-setting">
+                      <Form.Group>
+                        <Form.Row>
+                          <Form.Label column size="sm">Instant Run</Form.Label>
+                          <Col className="switch-setting">
+                            <Form.Check
+                              id="instant-run-enable"
+                              custom
+                              type="switch"
+                              label=""
+                              checked={true}
+                              disabled={true}
+                            />
+                          </Col>
+                        </Form.Row>
+                      </Form.Group>
+                    </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="second" onEntered={(e) => this.onSettingChange.bind(this)("lastTab", e, "second")}>
                     <code>This extension use "<a href="https://microsoft.github.io/monaco-editor/"><strong>Monaco Editor</strong></a>", some setting appear here:</code>
