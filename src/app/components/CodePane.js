@@ -27,18 +27,9 @@ class CodePane extends Component {
   }
 
   async handleModeRequire(mode) {
-    if (mode == "sass") {
-      if (!window.sass) {
-        console.log("load sass executor");
-        await loadJs("libs/sass.js");
-        window.sass = new Sass("libs/sass.worker.js");
-        console.log("load sass done");
-
-        const { onModeRequireLoaded } = this.props;
-        if (onModeRequireLoaded) {
-          onModeRequireLoaded(mode);
-        }
-      }
+    const { onModeRequireLoaded } = this.props;
+    if (onModeRequireLoaded) {
+      onModeRequireLoaded(mode);
     }
   }
 

@@ -65,7 +65,8 @@ module.exports = {
     }),
     new CopyPlugin([
       { from: './src/assets', to: './assets' },
-      { from: './src/libs', to: './libs' },
+      { from: './src/libs/sass.js', to: './static' },
+      { from: './src/libs/sass.worker.js', to: './static/worker' },
       { from: './src/background.js', to: './background.js' },
       { from: './src/manifest.json', to: './manifest.json' },
     ]),

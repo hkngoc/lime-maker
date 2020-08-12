@@ -170,8 +170,12 @@ class ContentWrap extends Component {
       },
       onInvokeCommandPalette,
       onCloseDiff,
-      current
+      current,
+      opened,
+      authorized,
+      auth
     } = this.props;
+    const restProps = { current, auth, authorized, opened };
     const { transition } = this.state;
 
     let mainDirection = layoutMode === 2 ? 'vertical' : 'horizontal';
@@ -210,7 +214,7 @@ class ContentWrap extends Component {
             onInvokeCommandPalette={onInvokeCommandPalette}
             onCloseDiff={onCloseDiff}
             transition={transition}
-            current={current}
+            { ... restProps }
           />
           <CodePane
             ref="style"
@@ -224,7 +228,7 @@ class ContentWrap extends Component {
             onInvokeCommandPalette={onInvokeCommandPalette}
             onCloseDiff={onCloseDiff}
             transition={transition}
-            current={current}
+            { ... restProps }
           />
           <CodePane
             ref="javascript"
@@ -237,7 +241,7 @@ class ContentWrap extends Component {
             onInvokeCommandPalette={onInvokeCommandPalette}
             onCloseDiff={onCloseDiff}
             transition={transition}
-            current={current}
+            { ... restProps }
           />
         </SplitPane>
         <div

@@ -63,14 +63,14 @@ class Main extends Component {
 
   onCompare(lime) {
     const { dispatch } = this.props;
-    dispatch(RunningActionCreators.update("compare", true));
     dispatch(RunningActionCreators.update("limeCompare", lime));
+    dispatch(RunningActionCreators.update("compare", true));
   }
 
   onCloseDiff() {
     const { dispatch } = this.props;
-    dispatch(RunningActionCreators.update("compare", false));
     dispatch(RunningActionCreators.update("limeCompare", null));
+    dispatch(RunningActionCreators.update("compare", false));
   }
 
   onUserFirstLogged() {

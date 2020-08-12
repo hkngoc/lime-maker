@@ -7,3 +7,6 @@ ReactDOM.render(
   <App/>,
   document.getElementById('root')
 );
+
+// init sass worker
+window.sass = new Sass();

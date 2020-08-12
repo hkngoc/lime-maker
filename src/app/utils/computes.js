@@ -21,17 +21,12 @@ async function computeHtml(code, mode) {
 
 async function computeStyle(code, mode) {
   if (mode == "scss" || mode == "sass") {
-    if (window.sass) {
-      return new Promise((resolve, reject) => {
-        let result = window.sass.compile(code, transplied => {
-          const { status, text } = transplied;
-          resolve(text);
-        });
+    return new Promise((resolve, reject) => {
+      let result = window.sass.compile(code, transplied => {
+        const { status, text } = transplied;
+        resolve(text);
       });
-    } else {
-      console.log("ever load sass");
-      return Promise.resolve(code);
-    }
+    });
   } else {
     return Promise.resolve(code);
   }
@@ -109,7 +104,7 @@ function getCompleteHtml(htmlSource = '', styleSource = '', jsSource = '', jsLib
     .split('\n')
     .filter(url => url)
     .map(url => {
-      if (url.startsWith("libs")) {
+      if (!url.startsWith("http") && !url.startsWith("https")) {
         return `      <script src="${location.origin}/${url}"></script>`;
       }
 
@@ -121,7 +116,7 @@ function getCompleteHtml(htmlSource = '', styleSource = '', jsSource = '', jsLib
     .split('\n')
     .filter(url => url)
     .map(url => {
-      if (url.startsWith("libs")) {
+      if (!url.startsWith("http") && !url.startsWith("https")) {
         return `      <link rel="stylesheet" href="${location.origin}/${url}"></link>`;
       } else {
         return `      <link rel="stylesheet" href="${url}"></link>`;
