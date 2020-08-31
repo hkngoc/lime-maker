@@ -159,7 +159,7 @@ class ContentWrap extends Component {
   }
 
   render() {
-    let {
+    const {
       setting: {
         layout: {
           layoutMode,
@@ -178,8 +178,8 @@ class ContentWrap extends Component {
     const restProps = { current, auth, authorized, opened };
     const { transition } = this.state;
 
-    let mainDirection = layoutMode === 2 ? 'vertical' : 'horizontal';
-    let codeDirection = (layoutMode === 2 || layoutMode === 4) ? 'horizontal' : 'vertical';
+    const mainDirection = layoutMode === 2 ? 'vertical' : 'horizontal';
+    const codeDirection = (layoutMode === 2 || layoutMode === 4) ? 'horizontal' : 'vertical';
 
     return (
       <SplitPane
@@ -197,11 +197,12 @@ class ContentWrap extends Component {
           className={`code-side`}
           gutterSize={4}
           sizes={codeSplitSizes}
-          minSize={31}
+          minSize={32}
           direction={codeDirection}
           gutterStyle={this.renderGutterStyle}
           elementStyle={this.renderElementStyle}
           onDragEnd={this.onDragEnd.bind(this, 'codeSplitSizes')}
+          layoutmode={layoutMode}
         >
           <CodePane
             ref="html"

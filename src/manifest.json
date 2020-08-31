@@ -15,5 +15,5 @@
     ]
   },
   "permissions": [ "tabs", "storage", "http://*/*", "https://*/*" ],
-  "content_security_policy": "script-src 'unsafe-inline' 'self' http://localhost:* https://localhost:* 'unsafe-eval' filesystem: https://apis.google.com https://ajax.googleapis.com https://code.jquery.com https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com https://unpkg.com https://maxcdn.com https://maxcdn.bootstrapcdn.com https://cdn.jsdelivr.net; style-src * 'unsafe-inline' 'self' blob: https://fonts.googleapis.com; img-src 'self' 'unsafe-eval' data: https:; font-src 'self' data: https://fonts.gstatic.com;"
+  "content_security_policy": "script-src 'unsafe-inline' 'self' http://localhost:* https://localhost:* 'unsafe-eval' filesystem: https://apis.google.com https://ajax.googleapis.com https://code.jquery.com https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com https://unpkg.com https://maxcdn.com https://maxcdn.bootstrapcdn.com https://cdn.jsdelivr.net; style-src * 'unsafe-inline' 'self' blob: https://*; img-src 'self' 'unsafe-eval' data: https:; font-src 'self' data: https://*;"
 }

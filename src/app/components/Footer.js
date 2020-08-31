@@ -48,18 +48,36 @@ class Footer extends Component {
   }
 
   layoutBtnClickhandler(layoutId) {
-    let { dispatch } = this.props;
+    const {
+      dispatch,
+      setting: {
+        layout: {
+          layoutMode,
+          mainSplitSizes,
+          cacheMainSplitSizes
+        }
+      }
+    } = this.props;
 
-    if (layoutId === 5) {
-      let action = SettingsActionCreators.updateLayout({
+    if (layoutId == 5 && layoutMode != 5) {
+      const action = SettingsActionCreators.updateLayout({
         layoutMode: 5,
-        mainSplitSizes: [0, 100]
+        mainSplitSizes: [0, 100],
+        cacheMainSplitSizes: mainSplitSizes
+      });
+      dispatch(action);
+      return;
+    }
+    if (layoutMode == 5 && layoutId != 5) {
+      const action = SettingsActionCreators.updateLayout({
+        layoutMode: layoutId,
+        mainSplitSizes: cacheMainSplitSizes || [50, 50]
       });
       dispatch(action);
       return;
     }
 
-    let action = SettingsActionCreators.update(`layout.layoutMode`, layoutId);
+    const action = SettingsActionCreators.update(`layout.layoutMode`, layoutId);
     dispatch(action);
   }
 
@@ -242,7 +260,15 @@ class Footer extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  let { setting } = state;
+
+  return {
+    setting
+  }
+}
+
 export default compose(
   withFirestore({ forwardRef: true }),
-  connect(null, null, null, { pure: false, forwardRef: true }),
+  connect(mapStateToProps, null, null, { pure: false, forwardRef: true }),
 )(Footer);

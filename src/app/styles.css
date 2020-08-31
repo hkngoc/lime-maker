@@ -427,7 +427,6 @@ input.input-setting {
 
 .modal-content {
   min-height: calc(100vh - 100px) !important;
-  max-height: calc(100vh - 100px) !important;
 }
 
 .avatar {
