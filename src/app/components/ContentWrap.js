@@ -106,11 +106,14 @@ class ContentWrap extends Component {
     });
   }
 
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.current.id != this.props.current.id) {
-  //     this.updateFrame("all");
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    const prevLayoutMode = _.get(prevProps, "setting.layout.layoutMode");
+    const nextLayoutMode = _.get(this.props, "setting.layout.layoutMode");
+
+    if (prevLayoutMode != nextLayoutMode) {
+      this.refreshEditor();
+    }
+  }
 
   onModeRequireLoaded(mode) {
     this.onSaveSource("all");
