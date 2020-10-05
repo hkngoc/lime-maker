@@ -37,17 +37,17 @@ const actionsMap = {
 
     limes = _.omit(limes, [id]);
 
-    if (_.keys(limes).length <= 0) {
-      const nextId = _(state).values().reduce((maxId, profile) => Math.max(profile.id, maxId), -1) + 1;
-      action.nextId = nextId;
-      limes = {
-        [nextId]: {
-          ...blankTemplate,
-          id: nextId,
-          lastModified: Date.now()
-        }
-      };
-    }
+    // if (_.keys(limes).length <= 0) {
+    //   const nextId = _(state).values().reduce((maxId, profile) => Math.max(profile.id, maxId), -1) + 1;
+    //   action.nextId = nextId;
+    //   limes = {
+    //     [nextId]: {
+    //       ...blankTemplate,
+    //       id: nextId,
+    //       lastModified: Date.now()
+    //     }
+    //   };
+    // }
 
     return limes;
   },

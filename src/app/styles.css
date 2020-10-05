@@ -444,3 +444,76 @@ input.input-setting {
   width: 20px;
   height: 20px;
 }
+
+.dropzone {
+  width: 100%;
+  height: 100%;
+}
+
+.atom-category {
+  color: #fff;
+  margin-right: 6px;
+  border-radius: 2px;
+  padding: 1.2px 3px;
+}
+
+.atom-shortcut {
+  float: right;
+  margin-right: 2px;
+  display: inline-block;
+  margin-left: 0.45454545em;
+  padding: 0 0.375em;
+  line-height: 2;
+  margin-top: -0.375em;
+  font-family: inherit;
+  font-size: 1em;
+  letter-spacing: 0.1em;
+  border-radius: 3px;
+  color: #fff;
+  background-color: #4d78cc;
+}
+
+/*.atom-category.Command {
+  background: rgb(67, 130, 207);
+}
+.atom-category.Command::after {
+  content: "Command";
+}
+*/
+.atom-category.Lime::after {
+  content: "🍋";
+}
+
+.atom-category.Limehub::after {
+  content: "🍍";
+}
+
+/*.atom-category.Navigate {
+  background: rgb(165, 22, 134);
+}
+.atom-category.Network {
+  background: rgb(46, 41, 194);
+}
+.atom-category.System {
+  background: rgb(49, 177, 79);
+}
+.atom-category.Drawer {
+  background: rgb(206, 64, 206);
+}
+
+.chrome-category.Command {
+  background: rgb(0, 188, 212);
+}
+.chrome-category.System {
+  background: rgb(76, 174, 80);
+}
+.chrome-category.Network {
+  background: rgb(63, 81, 181);
+}
+.chrome-category.Navigate {
+  background: rgb(255, 182, 0);
+}
+.chrome-category.Drawer {
+  background: rgb(0, 149, 136);
+}*/
+

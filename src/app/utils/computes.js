@@ -59,7 +59,7 @@ async function computeJavascript(code, mode, setting) {
   return Promise.resolve(code);
 }
 
-async function writeFile(name, blob) {
+async function writeFile(name, blob, mode = window.TEMPORARY) {
   let fileWritten = false;
 
   async function remove(fs, name) {
@@ -79,7 +79,7 @@ async function writeFile(name, blob) {
 
   return new Promise((resolve, reject) => {
     return window.webkitRequestFileSystem(
-      window.TEMPORARY,
+      mode,
       1024 * 1024 * 5,
       async (fs) => {
         await remove(fs, name);

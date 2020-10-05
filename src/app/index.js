@@ -14,6 +14,7 @@ const LoadingView = () => {
     </Loading>
   )
 };
+
 const App = () => {
   return (
     <Provider store={store}>

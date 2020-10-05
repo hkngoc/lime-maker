@@ -3,9 +3,9 @@ import BlockUi from 'react-block-ui';
 import 'react-block-ui/style.css';
 
 const Loading = (props) => {
-  const { children } = props;
+  const { children, blocking = true } = props;
   return (
-    <BlockUi blocking={true}>
+    <BlockUi tag="div" blocking={blocking}>
       { children }
     </BlockUi>
   )

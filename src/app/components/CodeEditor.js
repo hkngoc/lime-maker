@@ -3,6 +3,7 @@ import autobind from 'autobind-decorator';
 // import { compose } from 'redux';
 import { connect } from 'react-redux';
 import MonacoEditor, { MonacoDiffEditor } from 'react-monaco-editor';
+import Dropzone from 'react-dropzone';
 
 import {
   mapStateToProps as defaultMapStateToProps
@@ -145,6 +146,25 @@ class CodeEditor extends Component {
     this.setState({ code: newValue }, () => this.checkDiff());
   }
 
+  getAcceptFormat() {
+    const { authorized } = this.props;
+
+    if (authorized) {
+      return [
+        "application/json"
+      ];
+    } else {
+      return [
+        "application/json",
+        "zip",
+        "application/octet-stream",
+        "application/zip",
+        "application/x-zip",
+        "application/x-zip-compressed"
+      ];
+    }
+  }
+
   render() {
     const {
       mode,
@@ -164,36 +184,55 @@ class CodeEditor extends Component {
         limeCompare
       },
       current,
+      onDropLime
     } = this.props;
-    const { source: { [mode]: sourceCode = "" }, mode: { [mode]: language } } = current;
+    const { type, source: { [mode]: sourceCode = "" }, mode: { [mode]: language } } = current;
     const { code = "" } = this.state;
 
     const Editor = diff ? MonacoDiffEditor : MonacoEditor;
     const sourceCompare = diff ? limeCompare.source[mode] : "";
 
     return (
-      <Editor
-        language={LANGUAGE[language]}
-        editorDidMount={this.editorDidMount}
-        theme={theme}
-        original={sourceCompare}
-        value={code}
-        onChange={this.onChange}
-        options={{
-          automaticLayout: true,
-          fontSize: fontSize,
-          wordWrap: "off",
-          renderWhitespace: renderWhitespace,
-          fontLigatures: true,
-          mouseWheelZoom: false,
-          smoothScrolling: true,
-          scrollBeyondLastLine: false,
-          minimap: minimap,
-          enableSplitViewResizing: false,
-          // originalEditable: true,
-          // readOnly: diff ? true : false
-        }}
-      />
+      <Dropzone
+        onDropAccepted={onDropLime}
+        multiple={false}
+        noClick={true}
+        noKeyboard={true}
+        accept={this.getAcceptFormat()}
+      >
+        {({getRootProps, getInputProps}) => (
+          <div
+            className="dropzone"
+            {
+              ...getRootProps()
+            }
+          >
+            <input {...getInputProps()} />
+            <Editor
+              language={LANGUAGE[language]}
+              editorDidMount={this.editorDidMount}
+              theme={theme}
+              original={sourceCompare}
+              value={code}
+              onChange={this.onChange}
+              options={{
+                automaticLayout: true,
+                fontSize: fontSize,
+                wordWrap: "off",
+                renderWhitespace: renderWhitespace,
+                fontLigatures: true,
+                mouseWheelZoom: false,
+                smoothScrolling: true,
+                scrollBeyondLastLine: false,
+                minimap: minimap,
+                enableSplitViewResizing: false,
+                // originalEditable: true,
+                readOnly: type == "Limehub"
+              }}
+            />
+          </div>
+        )}
+      </Dropzone>
     );
   }
 }

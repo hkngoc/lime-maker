@@ -176,7 +176,8 @@ class ContentWrap extends Component {
       current,
       opened,
       authorized,
-      auth
+      auth,
+      onDropLime
     } = this.props;
     const restProps = { current, auth, authorized, opened };
     const { transition } = this.state;
@@ -218,6 +219,7 @@ class ContentWrap extends Component {
             onInvokeCommandPalette={onInvokeCommandPalette}
             onCloseDiff={onCloseDiff}
             transition={transition}
+            onDropLime={onDropLime}
             { ... restProps }
           />
           <CodePane
@@ -232,6 +234,7 @@ class ContentWrap extends Component {
             onInvokeCommandPalette={onInvokeCommandPalette}
             onCloseDiff={onCloseDiff}
             transition={transition}
+            onDropLime={onDropLime}
             { ... restProps }
           />
           <CodePane
@@ -245,6 +248,7 @@ class ContentWrap extends Component {
             onInvokeCommandPalette={onInvokeCommandPalette}
             onCloseDiff={onCloseDiff}
             transition={transition}
+            onDropLime={onDropLime}
             { ... restProps }
           />
         </SplitPane>

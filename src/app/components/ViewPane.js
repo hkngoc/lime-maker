@@ -91,22 +91,28 @@ export default class ViewPane extends Component {
         javascript: jsLibs,
         style: styleLibs
       },
+      type,
       id
     } = lime;
 
-    htmlSource = await computeHtml(htmlSource, htmlMode);
-    styleSource = await computeStyle(styleSource, styleMode);
-    jsSource = await computeJavascript(jsSource, jsMode, setting);
+    if (type == "Limehub") {
+      let src = `filesystem:${location.origin}/persistent/${id}/index.html`;
+      this.frame.src = src;
+    } else {
+      htmlSource = await computeHtml(htmlSource, htmlMode);
+      styleSource = await computeStyle(styleSource, styleMode);
+      jsSource = await computeJavascript(jsSource, jsMode, setting);
 
-    let blobjs = new Blob([jsSource], { type: 'text/plain;charset=UTF-8' });
-    await writeFile(`script_${id}.js`, blobjs);
+      let blobjs = new Blob([jsSource], { type: 'text/plain;charset=UTF-8' });
+      await writeFile(`script_${id}.js`, blobjs);
 
-    let contents = getCompleteHtml(htmlSource, styleSource, jsSource, jsLibs, styleLibs, `script_${id}.js`);
+      let contents = getCompleteHtml(htmlSource, styleSource, jsSource, jsLibs, styleLibs, `script_${id}.js`);
 
-    let blob = new Blob([contents], { type: 'text/plain;charset=UTF-8' });
-    await writeFile(`preview_${id}.html`, blob);
-    let src = `filesystem:${location.origin}/temporary/preview_${id}.html`;
-    this.frame.src = src;
+      let blob = new Blob([contents], { type: 'text/plain;charset=UTF-8' });
+      await writeFile(`preview_${id}.html`, blob);
+      let src = `filesystem:${location.origin}/temporary/preview_${id}.html`;
+      this.frame.src = src;
+    }
   }
 
   render() {

@@ -90,6 +90,7 @@ class CodePane extends Component {
       onCloseDiff,
       transition,
       running,
+      onDropLime,
       ...rest
     } = this.props;
     const { diff: { [mode]: diffState = false }, compare: diff }= running;
@@ -171,6 +172,8 @@ class CodePane extends Component {
           onDiff={this.onDiff}
           diffState={diffState}
           current={current}
+          onDropLime={onDropLime}
+          { ...rest }
         />
       </div>
     );

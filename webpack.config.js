@@ -67,7 +67,7 @@ module.exports = {
       { from: './src/assets', to: './assets' },
       { from: './src/libs/sass.js', to: './static' },
       { from: './src/libs/sass.worker.js', to: './static/worker' },
-      { from: './src/background.js', to: './background.js' },
+      // { from: './src/background.js', to: './background.js' },
       { from: './src/manifest.json', to: './manifest.json' },
     ]),
     new MonacoWebpackPlugin({
@@ -138,7 +138,7 @@ module.exports = {
   //   minimize: true,
   //   minimizer: [new TerserPlugin()],
   // },
-  devtool: ENV === 'production' ? '' : 'eval-cheap-source-map',
+  devtool: ENV === 'production' ? '' : 'eval-source-map',
   devServer: {
     port: process.env.PORT || PORT,
     host: HOST,

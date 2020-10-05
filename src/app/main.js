@@ -28,6 +28,13 @@ import './styles.css';
 
 @autobind
 class Main extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      superLoading: false
+    }
+  }
+
   componentDidUpdate(prevProps) {
     const { limes, auth: { uid }, opened } = this.props;
 
@@ -87,9 +94,34 @@ class Main extends Component {
     }
   }
 
+  async onDropLime([file]) {
+    try {
+      // setState loading true
+      this.setState({
+        superLoading: true
+      });
+      await this.refs.commands.handleDropAcceptFile(file);
+      // show success toast
+    } catch (e) {
+      // show error toast
+    } finally {
+      // setState loading true
+      this.setState({
+        superLoading: false
+      });
+    }
+  }
+
+  onTonOfLoading(status) {
+    this.setState({
+      superLoading: status
+    });
+  }
+
   render() {
     const { limes, current, auth, authorized, opened } = this.props;
     const restProps = { limes, current, auth, authorized, opened };
+    const { superLoading } = this.state;
 
     return (
       <Fragment>
@@ -98,15 +130,17 @@ class Main extends Component {
           onRequestAddLibrary={() => this.refs.lib.handleShow()}
           onOpenProfile={this.onOpenProfile}
           onCompare={this.onCompare}
+          onTonOfLoading={this.onTonOfLoading}
           { ...restProps }
         />
         <div className="main-container">
           {
-            current ? (
+            current && !superLoading ? (
               <ContentWrap
                 ref="content"
                 onInvokeCommandPalette={() => this.refs.commands.refs.cmd.handleOpenModal()}
                 onCloseDiff={this.onCloseDiff}
+                onDropLime={this.onDropLime}
                 { ...restProps }
               />
             ) : (

@@ -17,7 +17,16 @@ const TEMPLATES = {
   react: reactTemplate
 };
 
-import importLime from '../utils/import';
+const ACCEPT_FULL = [
+  "application/json",
+  "zip",
+  "application/octet-stream",
+  "application/zip",
+  "application/x-zip",
+  "application/x-zip-compressed"
+];
+
+import importLime, { checkLime, trimLime, extractLime, extractLimehub, removeFolder } from '../utils/import';
 import exportLime from '../utils/export';
 
 @autobind
@@ -32,52 +41,52 @@ class Commands extends Component {
 
   getCommandList() {
     return [{
-      category: 'command',
+      category: 'Command',
       id: 1,
       name: 'New Lime',
       command: this.handleSelectCreateProfile
     }, {
-      category: 'command',
+      category: 'Command',
       id: 2,
       name: 'Fork Lime',
       command: this.handleSelectProfile.bind(this, "onForkProfile")
     }, {
-      category: 'command',
+      category: 'Command',
       id: 3,
       name: 'Remove Lime',
       command: this.handleSelectProfile.bind(this, "onRemoveProfile")
     }, {
-      category: 'command',
+      category: 'Command',
       id: 4,
       name: 'Open Lime',
       command: this.handleSelectProfile.bind(this, "onOpenProfile", true)
     }, {
-      category: 'command',
+      category: 'Command',
       id: 5,
       name: 'Add library',
       command: this.handleAddLibrary
     }, {
-      category: 'command',
+      category: 'Command',
       id: 6,
       name: 'Import Lime fron json',
       command: this.handleImportProfile
     }, {
-      category: 'command',
+      category: 'Command',
       id: 7,
       name: 'Export Lime to json',
       command: this.handleSelectProfile.bind(this, "onExportProfile")
     }, {
-      category: 'command',
+      category: 'Command',
       id: 8,
       name: 'Export all Lime to json',
       command: this.handleExportAllProfile
     },{
-      category: 'command',
+      category: 'Command',
       id: 9,
       name: 'Compare with other lime',
       command: this.handleSelectProfile.bind(this, "onCompareProfile", true)
     }, {
-      category: 'command',
+      category: 'Command',
       id: 10,
       name: 'Compare with json file',
       command: this.handleImportCompareProfile
@@ -101,6 +110,9 @@ class Commands extends Component {
     this.defaultCommand();
     try {
       const template = await importLime();
+      if (!checkLime(template)) {
+        return;
+      }
       const { onCompare } = this.props;
       if (onCompare) {
         onCompare(template);
@@ -121,7 +133,6 @@ class Commands extends Component {
   ////////////////////////////////////////////////////////////////////////////////////////////////
   async createProfile(lime) {
     const { firestore, auth: { uid }, authorized } = this.props;
-    const { id, createdAt, updatedAt, ...template } = lime;
 
     if (authorized) {
       const { id } = await firestore.add({
@@ -131,7 +142,7 @@ class Commands extends Component {
           collection: "limes"
         }]
       }, {
-        ...template,
+        ...lime,
         createdAt: firestore.FieldValue.serverTimestamp()
       });
 
@@ -145,16 +156,47 @@ class Commands extends Component {
     }
   }
 
-  async handleImportProfile() {
-    this.defaultCommand();
-    try {
-      const template = await importLime();
+  async handleDropAcceptFile(file) {
+    const { type } = file;
+    if (type == "application/json") {
+      const json = await extractLime(file);
+      if (!checkLime(json)) {
+        throw Error("invalid format");
+      }
+      const template = trimLime(json);
       template.title = `(Imported) ${template.title}`;
-
       await this.createProfile(template);
+      // throw toast success
+    } else {
+      // need logic check that only work on un-authorized
+      const id = await this.createProfile({
+        ...blankTemplate,
+        title: `(Imported) ${file.name}`,
+        type: "Limehub"
+      });
+      // unzip and write to folder id with Window.PERSISTENT type
+      await extractLimehub(file, id);
+    }
 
-      this.notifyChange();
-    } catch(e) {
+    this.notifyChange();
+  }
+
+  async handleImportProfile() {
+    const { onTonOfLoading, authorized } = this.props;
+    this.defaultCommand();
+
+    try {
+      if (onTonOfLoading) {
+        onTonOfLoading(true);
+      }
+      const file = await importLime(authorized ? "application/json" : _.join(ACCEPT_FULL, ","));
+      await this.handleDropAcceptFile(file);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      if (onTonOfLoading) {
+        onTonOfLoading(false);
+      }
     }
   }
 
@@ -200,7 +242,8 @@ class Commands extends Component {
   }
 
   async onRemoveProfile(id) {
-    const { firestore, auth: { uid }, authorized, limes } = this.props;
+    this.defaultCommand();
+    const { firestore, auth: { uid }, authorized, limes, onTonOfLoading } = this.props;
 
     if (authorized) {
       await firestore.delete({
@@ -216,6 +259,22 @@ class Commands extends Component {
 
       let action = LimeActionCreators.removeLime(id);
       dispatch(action);
+    }
+
+    const { type } = _.find(limes, l => l.id == id);
+    if (type == "Limehub") {
+      try {
+        if (onTonOfLoading) {
+          onTonOfLoading(true);
+        }
+        await removeFolder(1024*1024*10, id);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        if (onTonOfLoading) {
+          onTonOfLoading(false);
+        }
+      }
     }
 
     // check empty and add default
@@ -281,10 +340,10 @@ class Commands extends Component {
     const { limes, opened } = this.props;
 
     let commands = _(limes)
-      .map(lime => ({
+      .map((lime) => ({
         id: lime.id,
         name: lime.title,
-        category: type,
+        category: lime.type || "Lime",
         command: this.onSelectProfile.bind(this, type, lime.id)
       }))
       // .orderBy(['id'], ['desc'])
@@ -334,6 +393,24 @@ class Commands extends Component {
     )
   }
 
+  renderCommand(suggestion) {
+    const { name, highlight, category, shortcut } = suggestion;
+
+    return (
+      <div className="item">
+        <span className={`atom-category ${category}`}></span>
+        {highlight ? (
+          <span dangerouslySetInnerHTML={{ __html: highlight }} />
+        ) : (
+          <span>{name}</span>
+        )}
+        {
+          shortcut && <kbd className="atom-shortcut">{shortcut}</kbd>
+        }
+      </div>
+    );
+  }
+
   render() {
     const { commands } = this.state;
 
@@ -350,7 +427,9 @@ class Commands extends Component {
         showSpinnerOnSelect={false}
         maxDisplayed={100}
         highlightFirstSuggestion={true}
-        resetInputOnClose={true}/>
+        resetInputOnClose={true}
+        renderCommand={this.renderCommand}
+      />
     );
   }
 }
